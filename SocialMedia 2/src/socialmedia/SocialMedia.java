@@ -43,14 +43,35 @@ public class SocialMedia implements SocialMediaPlatform {
 		Accounts.add(accountn); 
 		//use the .getId method to return the id of the new account.
 		return accountn.getId();
-		}
-		
-	}
+	}	
 
 	@Override
+	/**
+	 * This fuction creates an account given a handle and a description
+	 * It checks that the handle is valid and legal (not in use), and then returns the ID of the created account
+	 * 
+	 * 
+	 * @param handle - String: the handle of the account that the user wishes to create
+	 * @param description - String: the description that the Account will have
+	 * 
+	 * @return id - int: the id of the created account
+	 * 
+	 */
 	public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
-		// TODO Auto-generated method stub
-		return 0;
+		//call the original createAccount class with only the handle, storing the id it returns
+		int id = createAccount(handle);
+		//loop through each account in the ArrayList, to find the account that was just created using the id.
+		for (int i=0; i<Accounts.size(); i++) {
+			if (Accounts.get(i).getId() == id) {
+				//set the description of this account to the description given in the input
+				Accounts.get(i).setDescription(description);
+			}
+		}
+		//return the id generated from the original createAccount call
+		return id;
+
+
+
 	}
 
 	@Override
