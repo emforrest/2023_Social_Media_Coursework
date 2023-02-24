@@ -23,6 +23,14 @@ public class Account {
         this.id = ++NO_OF_ACCOUNTS;
         this.description = description;
     }
+    
+    public String getHandle() {
+        return handle;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     
 
