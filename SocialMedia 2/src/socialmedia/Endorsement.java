@@ -10,5 +10,15 @@ public class Endorsement extends Post{
         this.originalPostId = originalPostId;
         this.postType = "EndorsementPost"; 
     }
+
+    //static method to get the number of endorsements 
+    public static int getNO_OF_ENDORSEMENTS() {
+        return NO_OF_ENDORSEMENTS;
+    }
+
+    //object getters 
+    public int getOriginalPostId() {
+        return originalPostId;
+    }
  
 }

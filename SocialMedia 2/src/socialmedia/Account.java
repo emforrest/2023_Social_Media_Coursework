@@ -24,6 +24,12 @@ public class Account {
         this.description = description;
     }
     
+    //define the static method to get the number of accoutns
+    public static int getNO_OF_ACCOUNTS() {
+        return NO_OF_ACCOUNTS;
+    }
+    
+    //define the getters 
     public String getHandle() {
         return handle;
     }
@@ -31,6 +37,21 @@ public class Account {
     public int getId() {
         return id;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    //define the setters 
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+  
 
     
 

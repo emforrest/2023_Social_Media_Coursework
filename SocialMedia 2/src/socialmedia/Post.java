@@ -12,6 +12,16 @@ public class Post {
         postId = ++NO_OF_POSTS; 
     }
 
+    //static class getter for NO_OF_POSTS attribute
+    public static int getNO_OF_POSTS() {
+        return NO_OF_POSTS;
+    }
+
+    //define the getters 
+    public String getMesssage() {
+        return message;
+    }
+
 
     
 }
