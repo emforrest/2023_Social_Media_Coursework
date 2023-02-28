@@ -79,7 +79,7 @@ public class Account {
         throw new PostIDNotRecognisedException();
     }
     
-    public void deleteAllPosts(){
+    public void deleteAllPosts() throws PostIDNotRecognisedException{
         for(Post p :posts){
             deletePost(p.getId());
         }
