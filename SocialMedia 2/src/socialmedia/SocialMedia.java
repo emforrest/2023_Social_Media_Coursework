@@ -13,6 +13,16 @@ import java.util.ArrayList;
 public class SocialMedia implements SocialMediaPlatform {
 	private ArrayList<Account> Accounts = new ArrayList<>();
 
+	public Account returnAccount(String handle) throws HandleNotRecognisedException {
+		//Given an account handle, return the account object
+		for(int i=0; i<Accounts.size(); i++) {
+			if (Accounts.get(i).getHandle().equals(handle)) {
+				return Accounts.get(i);
+			}
+		}
+		throw new HandleNotRecognisedException(); //if the account with this handle doesn't exist
+	}
+
 	@Override
 	/**
 	 * This fuction creates an account given a handle but no description
@@ -29,7 +39,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		if ((handle.isEmpty()) || (handle.length() < 30) || (handle.contains(" "))) {
 			throw new InvalidHandleException();
 		}
-		//search the Accounts ArrayList to see if the handle is allready in use 
+		//search the Accounts ArrayList to see if the handle is already in use 
 		for (int i = 0; i<Accounts.size(); i++) { 
 			Account Accountn = Accounts.get(i); 
 			//using the String class, use .equals method.
@@ -76,13 +86,21 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		// TODO Auto-generated method stub
+		for (int i=0; i<Accounts.size(); i++) {
+			if (Accounts.get(i).getId() == id){
+				Accounts.get(i).deleteAllPosts();
+				Accounts.remove(i);
+
+			}
+		}
 
 	}
 
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
+		Account account = returnAccount(handle);
+		account.deleteAllPosts();
+		Accounts.remove(account);
 
 	}
 

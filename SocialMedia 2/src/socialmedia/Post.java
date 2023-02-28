@@ -22,6 +22,19 @@ public class Post {
         return message;
     }
 
+    public int getId(){
+        return postId;
+    }
 
-    
+    public String getPostType(){
+        return postType;
+    }
+
+    public void setMessage(String message){
+        this.message = message;
+    }
+
+    public void setPostType(String postType){
+        this.postType = postType;
+    }
 }
