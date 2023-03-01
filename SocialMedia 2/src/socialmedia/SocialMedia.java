@@ -139,7 +139,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
 		Account a = returnAccount(handle);
-		if ((handle.isEmpty()) || (handle.length() < 30)) {
+		if ((message.isEmpty()) || (message.length() > 100)) {
 			throw new InvalidPostException();
 		}
 		int PostId = a.makePost(message);
@@ -151,14 +151,15 @@ public class SocialMedia implements SocialMediaPlatform {
 			throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
 		Account endorsing = returnAccount(handle); 
 		for (Account endorsed : Accounts) {
-			if (endorsed.hasPost(id));
-			Post originalPost = endorsed.getPost(id); 
-			if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
-				throw new NotActionablePostException();
+			if (endorsed.hasPost(id)) {
+				Post originalPost = endorsed.getPost(id); 
+				if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
+					throw new NotActionablePostException();
+				}
+				int newID = endorsing.makeEndorsement(id, endorsed.getHandle(), originalPost.getMesssage());
+				endorsed.endorsed();
+				return newID;
 			}
-			int newID = endorsing.makeEndorsement(id, endorsed.getHandle(), originalPost.getMesssage());
-			endorsed.endorsed();
-			return newID;
 		}
 		throw new PostIDNotRecognisedException();
 	}
@@ -166,13 +167,28 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public int commentPost(String handle, int id, String message) throws HandleNotRecognisedException,
 			PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
-		// TODO Auto-generated method stub
-		return 0;
+		Account commenting = returnAccount(handle); 
+		for (Account commented : Accounts) {
+			Post originalPost = commented.getPost(id); 
+			if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
+				throw new NotActionablePostException();
+			if ((message.isEmpty()) || (message.length() > 100)) {
+				throw new InvalidPostException();
+			}
+			int newId = commenting.makeComment(id, message);
+		}
+		throw new PostIDNotRecognisedException();
+
 	}
 
 	@Override
 	public void deletePost(int id) throws PostIDNotRecognisedException {
-		// TODO Auto-generated method stub
+		for (Account a : Accounts) {
+			if (a.hasPost(id)) {
+				a.deletePost(id);
+			}
+		}
+		throw new PostIDNotRecognisedException();
 
 	}
 

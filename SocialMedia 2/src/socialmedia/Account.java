@@ -32,6 +32,12 @@ public class Account {
         return p.getId();
     }
 
+    public int makeComment(int originalId, String message) {
+        Comment c = new Comment(message, originalId); 
+        posts.add(c); 
+        return c.getId();
+    }
+
     public int makeEndorsement(int originalId, String originalHandle, String orignalMessage) {
         String message = ("EP@" + originalHandle + ": " + orignalMessage);
         Endorsement e = new Endorsement(message, originalId); 
