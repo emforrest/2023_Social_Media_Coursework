@@ -169,16 +169,19 @@ public class SocialMedia implements SocialMediaPlatform {
 			PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
 		Account commenting = returnAccount(handle); 
 		for (Account commented : Accounts) {
-			Post originalPost = commented.getPost(id); 
-			if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
-				throw new NotActionablePostException();
-			if ((message.isEmpty()) || (message.length() > 100)) {
-				throw new InvalidPostException();
+			if (commented.hasPost(id)) {
+				Post originalPost = commented.getPost(id); 
+				if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
+					throw new NotActionablePostException();
+				}
+				if ((message.isEmpty()) || (message.length() > 100)) {
+					throw new InvalidPostException();
+				}
+				int newId = commenting.makeComment(id, message);
+				return newId;
 			}
-			int newId = commenting.makeComment(id, message);
 		}
 		throw new PostIDNotRecognisedException();
-
 	}
 
 	@Override
