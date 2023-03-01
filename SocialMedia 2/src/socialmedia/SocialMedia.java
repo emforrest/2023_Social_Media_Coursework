@@ -15,9 +15,9 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	public Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//Given an account handle, return the account object
-		for(int i=0; i<Accounts.size(); i++) {
-			if (Accounts.get(i).getHandle().equals(handle)) {
-				return Accounts.get(i);
+		for(Account a : Accounts) {
+			if (a.getHandle().equals(handle)) {
+				return a;
 			}
 		}
 		throw new HandleNotRecognisedException(); //if the account with this handle doesn't exist
@@ -40,10 +40,9 @@ public class SocialMedia implements SocialMediaPlatform {
 			throw new InvalidHandleException();
 		}
 		//search the Accounts ArrayList to see if the handle is already in use 
-		for (int i = 0; i<Accounts.size(); i++) { 
-			Account Accountn = Accounts.get(i); 
+		for (Account a : Accounts) {  
 			//using the String class, use .equals method.
-			if (Accountn.getHandle().equals(handle)) {
+			if (a.getHandle().equals(handle)) {
 				throw new IllegalHandleException();
 			}
 		}
@@ -71,10 +70,10 @@ public class SocialMedia implements SocialMediaPlatform {
 		//call the original createAccount class with only the handle, storing the id it returns
 		int id = createAccount(handle);
 		//loop through each account in the ArrayList, to find the account that was just created using the id.
-		for (int i=0; i<Accounts.size(); i++) {
-			if (Accounts.get(i).getId() == id) {
+		for (Account a : Accounts) {
+			if (a.getId() == id) {
 				//set the description of this account to the description given in the input
-				Accounts.get(i).setDescription(description);
+				a.setDescription(description);
 			}
 		}
 		//return the id generated from the original createAccount call
@@ -86,10 +85,10 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		for (int i=0; i<Accounts.size(); i++) {
-			if (Accounts.get(i).getId() == id){
-				Accounts.get(i).deleteAllPosts();
-				Accounts.remove(i);
+		for (Account a : Accounts) {
+			if (a.getId() == id){
+				a.deleteAllPosts();
+				Accounts.remove(a);
 
 			}
 		}
@@ -107,33 +106,61 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
-		// TODO Auto-generated method stub
-
+		Account a = returnAccount((oldHandle));
+		for (Account b : Accounts) {
+			if (b.getHandle().equals(newHandle)) {
+				throw new IllegalHandleException();
+			}
+		}
+		if ((newHandle.isEmpty()) || (newHandle.length() < 30) || (newHandle.contains(" "))) {
+			throw new InvalidHandleException();
+		}
+		a.setHandle(newHandle);
 	}
 
 	@Override
 	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
-
+		Account a = returnAccount(handle);
+		a.setDescription(description);
 	}
 
 	@Override
 	public String showAccount(String handle) throws HandleNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		String accountOut = "";
+		Account a = returnAccount(handle);
+		accountOut += ("ID: [" + Integer.toString(a.getId()) + "] \n");
+		accountOut += ("Handle: [" + a.getHandle() + "] \n");
+		accountOut += ("Description: [" + a.getDescription() + "] \n"); 
+		accountOut += ("Post count: [" + Integer.toString(a.getNoOfPosts()) + "] \n");
+		accountOut += ("Endorse count: [" + Integer.toString(a.getNoOfEndorsements()) + "] \n"); 
+		return accountOut;
 	}
 
 	@Override
 	public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
-		// TODO Auto-generated method stub
-		return 0;
+		Account a = returnAccount(handle);
+		if ((handle.isEmpty()) || (handle.length() < 30)) {
+			throw new InvalidPostException();
+		}
+		int PostId = a.makePost(message);
+		return PostId;
 	}
 
 	@Override
 	public int endorsePost(String handle, int id)
 			throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
-		// TODO Auto-generated method stub
-		return 0;
+		Account endorsing = returnAccount(handle); 
+		for (Account endorsed : Accounts) {
+			if (endorsed.hasPost(id));
+			Post originalPost = endorsed.getPost(id); 
+			if (originalPost.getPostType().equals("EndorsementPost") || originalPost.getPostType().equals("DeletedPost"))  {
+				throw new NotActionablePostException();
+			}
+			int newID = endorsing.makeEndorsement(id, endorsed.getHandle(), originalPost.getMesssage());
+			endorsed.endorsed();
+			return newID;
+		}
+		throw new PostIDNotRecognisedException();
 	}
 
 	@Override

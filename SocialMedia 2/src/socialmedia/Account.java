@@ -10,6 +10,7 @@ public class Account {
     private int id;
     private String handle; 
     private String description; 
+    private int noOfEndorsements = 0;
     // We create an array list using the post, comment and endorsement classes for all of the posts linked to the account object. 
     private ArrayList<Post> posts = new ArrayList<>();
 
@@ -23,6 +24,19 @@ public class Account {
         this.handle = handle; 
         this.id = ++NO_OF_ACCOUNTS;
         this.description = description;
+    }
+    
+    public int makePost(String message) {
+        Post p = new Post(message);
+        posts.add(p); 
+        return p.getId();
+    }
+
+    public int makeEndorsement(int originalId, String originalHandle, String orignalMessage) {
+        String message = ("EP@" + originalHandle + ": " + orignalMessage);
+        Endorsement e = new Endorsement(message, originalId); 
+        posts.add(e);
+        return e.getId();
     }
     
     //define the static method to get the number of accoutns
@@ -39,6 +53,10 @@ public class Account {
         return id;
     }
 
+    public void endorsed() {
+        noOfEndorsements += 1;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -52,37 +70,50 @@ public class Account {
         this.description = description;
     }
 
-    
-    public Post accessPost(int id) throws PostIDNotRecognisedException{
-        for (int i = 0; i <posts.size(); i++){
-            if (posts.get(i).getId() == id){
-                return posts.get(i);
+    public boolean hasPost(int id) {
+        for (Post p : posts){
+            if (p.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Post getPost(int id) throws PostIDNotRecognisedException{
+        for (Post p : posts){
+            if (p.getId() == id){
+                return p;
             }
         }
         throw new PostIDNotRecognisedException();
-    }
-
-    public void addPost(String message){
-        Post post = new Post(message);
-        posts.add(post);
     }
 
     public void deletePost(int id) throws PostIDNotRecognisedException{
-        for (int i = 0; i <posts.size(); i++){
-            if (posts.get(i).getId() == id){
-                posts.get(i).setMessage("The original content was removed from the system and is no longer available.");
-                posts.get(i).setPostType("DeletedPost");
-                posts.remove(i);
+        for (Post p : posts){
+            if (p.getId() == id){
+                p.setMessage("The original content was removed from the system and is no longer available.");
+                p.setPostType("DeletedPost");
+                posts.remove(p);
 
             }
         }
         throw new PostIDNotRecognisedException();
     }
     
-    public void deleteAllPosts() throws PostIDNotRecognisedException{
+    public void deleteAllPosts() {
         for(Post p :posts){
-            deletePost(p.getId());
+            p.setMessage("The original content was removed from the system and is no longer available.");
+            p.setPostType("DeletedPost");
+            posts.remove(p);
         }
+    }
+
+    public int getNoOfPosts() { 
+        return posts.size();
+    }
+
+    public int getNoOfEndorsements() {
+        return noOfEndorsements; 
     }
 
 }
