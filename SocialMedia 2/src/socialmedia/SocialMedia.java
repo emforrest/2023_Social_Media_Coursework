@@ -246,8 +246,24 @@ public class SocialMedia implements SocialMediaPlatform {
 		throw new PostIDNotRecognisedException();
 	}
 
-	private StringBuilder recursivePost(int id, int depth, StringBuilder postChildrenDetails){
-		postChildrenDetails.append("| ");
+	private StringBuilder recursivePost(int id, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
+		if (depth != 0){
+			for (Account a: Accounts){
+				if (a.hasPost(id)){
+					Post post = a.getPost(id);
+					for(int i =0; i<depth, i++){
+						postChildrenDetails.append("\t")
+					}
+					postChildrenDetails.append("| > " + showIndividualPost(post);
+					if (post.getNumberOfComments()==0){
+						return postChildrenDetails;
+					}
+					postChildrenDetails.append("| \n");
+					//for loop
+					
+				}
+			}
+		}
 		return postChildrenDetails;
 	}
 
