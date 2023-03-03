@@ -238,7 +238,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				if (a.getPost(id).getPostType().equals("EndorsementPost") || a.getPost(id).getPostType().equals("DeletedPost")){
 					throw new NotActionablePostException();
 				}
-				StringBuilder str = showIndividualPost(id);
+				Stringbuilder str = showIndividualPost(id);
 				StringBuilder postChildrenDetails = recursivePost(id, 0, str);
 				return postChildrenDetails;
 			}
@@ -247,13 +247,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	private StringBuilder recursivePost(int id, int depth, StringBuilder postChildrenDetails){
-		if (depth != 0){
-			for (Account a: Accounts){
-				if (a.hasPost(id)){
-					Post post = a.getPost(id);
-				}
-			}
-		}
+		postChildrenDetails.append("| ")
 	}
 
 	@Override
