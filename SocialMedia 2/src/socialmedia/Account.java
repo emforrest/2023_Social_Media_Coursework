@@ -1,5 +1,6 @@
 package socialmedia;
 import java.util.ArrayList;
+import java.util.Iterator;
 /**
  * The class that contains all of the user account objects. These consist of a unique ID, a handle, a description, an arraylist of posts, comments
  * as well as endorsements 
@@ -95,14 +96,14 @@ public class Account {
     }
 
     public void deletePost(int id) throws PostIDNotRecognisedException{
-        for (Post p : posts){
-            if (p.getId() == id){
-                p.setMessage("The original content was removed from the system and is no longer available.");
-                p.setPostType("DeletedPost");
-                posts.remove(p);
+        Iterator itr = posts.iterator();
+		while (itr.hasNext()) {
+			Post p = (Post)itr.next();
+            p.setMessage("The original content was removed from the system and is no longer available.");
+            p.setPostType("DeletedPost");
+            itr.remove();
 
             }
-        }
         throw new PostIDNotRecognisedException();
     }
     
@@ -122,4 +123,14 @@ public class Account {
         return noOfEndorsements; 
     }
 
+    public ArrayList<Comment> getComments() {
+        ArrayList<Comment> comments = new ArrayList<>();
+        for (Post p : posts) {
+            if (p.getPostType().equals("CommentPost")) {
+                Comment c = (Comment)p;
+                comments.add(c);
+            }
+        }
+        return comments;
+    }
 }

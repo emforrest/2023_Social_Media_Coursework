@@ -1,6 +1,8 @@
 package socialmedia;
 
 import java.io.IOException;
+import java.util.Scanner;
+import java.util.Iterator;
 import java.util.ArrayList;
 
 /**
@@ -36,7 +38,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	 */
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 		//check if the account handle is valid 
-		if ((handle.isEmpty()) || (handle.length() < 30) || (handle.contains(" "))) {
+		if ((handle.isEmpty()) || (handle.length() > 30) || (handle.contains(" "))) {
 			throw new InvalidHandleException();
 		}
 		//search the Accounts ArrayList to see if the handle is already in use 
@@ -85,10 +87,12 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		for (Account a : Accounts) {
+		Iterator itr = Accounts.iterator();
+		while (itr.hasNext()) {
+			Account a = (Account)itr.next();
 			if (a.getId() == id){
 				a.deleteAllPosts();
-				Accounts.remove(a);
+				itr.remove();
 
 			}
 		}
@@ -158,6 +162,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				}
 				int newID = endorsing.makeEndorsement(id, endorsed.getHandle(), originalPost.getMesssage());
 				endorsed.endorsed();
+				originalPost.addEndorsement();
 				return newID;
 			}
 		}
@@ -178,6 +183,7 @@ public class SocialMedia implements SocialMediaPlatform {
 					throw new InvalidPostException();
 				}
 				int newId = commenting.makeComment(id, message);
+				originalPost.addComment();
 				return newId;
 			}
 		}
@@ -239,32 +245,56 @@ public class SocialMedia implements SocialMediaPlatform {
 				}
 				StringBuilder postChildrenDetails = new StringBuilder();
 				postChildrenDetails.append(showIndividualPost(id));
-				postChildrenDetails.append(recursivePost(id, 0, postChildrenDetails));
+				postChildrenDetails.append(recursivePost(a.getPost(id), 0, postChildrenDetails));
 				return postChildrenDetails;
 			}
 		}
 		throw new PostIDNotRecognisedException();
 	}
 
-	private StringBuilder recursivePost(int id, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
+	private StringBuilder recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
+		// if depth = 0, the post is the original post, and so does not need to be altered
 		if (depth != 0){
-			for (Account a: Accounts){
-				if (a.hasPost(id)){
-					Post post = a.getPost(id);
-					for(int i =0; i<depth, i++){
-						postChildrenDetails.append("\t")
-					}
-					postChildrenDetails.append("| > " + showIndividualPost(post);
-					if (post.getNumberOfComments()==0){
-						return postChildrenDetails;
-					}
-					postChildrenDetails.append("| \n");
-					//for loop
-					
+			// adds the indent for the | > that is put before each post 
+			for(int i =1; i<depth; i++){
+				postChildrenDetails.append("\t");
+			}
+			//put in the | > that links a post to it's reply
+			postChildrenDetails.append("| >");
+			// go through each line, and indent it before adding to the string builder 
+			Scanner scanner = new Scanner(showIndividualPost(post.getId()));
+			while(scanner.hasNextLine()) {
+				for(int i =0; i<depth; i++){
+					postChildrenDetails.append("\t");
+				}
+				//after indenting each line, add it to the stringbuilder
+				postChildrenDetails.append(scanner.nextLine() + "\n");
+			}
+			//close the scanner
+			scanner.close();
+		}
+		//base case, if number of comments is 0, exit recusion
+		if (post.getNumberOfComments()==0){
+			return postChildrenDetails;
+		}
+		// loop add the indent for the | that goes below a post/comment
+		for(int i =0; i<depth; i++){
+			postChildrenDetails.append("\t");
+		}
+		// add the | that goes below
+		postChildrenDetails.append("| \n");
+		// acess all the posts of type "CommentPost for each account, and see if they are linked to the post stored in post"
+		for (Account a2 : Accounts) {
+			ArrayList<Comment> Comments = a2.getComments();
+			for(Comment c : Comments) {
+				if (c.getOriginalPostID() == post.getId()) {
+					// if a account has a comment linked aboce, call recursivePost on it, increasing the depth by 1
+					recursivePost(c, depth + 1, postChildrenDetails);
 				}
 			}
 		}
-		return postChildrenDetails;
+		//this exits the function if a comment has been deleted.
+		return(postChildrenDetails);
 	}
 
 	@Override
