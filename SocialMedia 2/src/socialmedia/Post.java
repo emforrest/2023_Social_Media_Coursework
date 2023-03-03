@@ -5,6 +5,8 @@ public class Post {
     protected int postId; 
     protected String message; 
     protected String postType = "OriginalPost"; 
+    protected int numberOfEndorsements = 0;
+    protected int numberOfComments = 0;
 
     //constructor to create a post 
     public Post(String message) {
@@ -36,5 +38,29 @@ public class Post {
 
     public void setPostType(String postType){
         this.postType = postType;
+    }
+
+    public int getNumberOfEndorsements(){
+        return numberOfEndorsements;
+    }
+
+    public void addEndorsement(){
+        numberOfEndorsements += 1;
+    }
+
+    public void removeEndorsement(){
+        numberOfEndorsements -= 1;
+    }
+
+    public int getNumberOfComments(){
+        return numberOfComments;
+    }
+
+    public void addComment(){
+        numberOfComments += 1;
+    }
+
+    public void removeComment(){
+        numberOfComments -= 1;
     }
 }
