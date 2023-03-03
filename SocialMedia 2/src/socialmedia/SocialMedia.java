@@ -128,11 +128,11 @@ public class SocialMedia implements SocialMediaPlatform {
 	public String showAccount(String handle) throws HandleNotRecognisedException {
 		String accountOut = "";
 		Account a = returnAccount(handle);
-		accountOut += ("ID: [" + Integer.toString(a.getId()) + "] \n");
-		accountOut += ("Handle: [" + a.getHandle() + "] \n");
-		accountOut += ("Description: [" + a.getDescription() + "] \n"); 
-		accountOut += ("Post count: [" + Integer.toString(a.getNoOfPosts()) + "] \n");
-		accountOut += ("Endorse count: [" + Integer.toString(a.getNoOfEndorsements()) + "] \n"); 
+		accountOut += ("ID: " + Integer.toString(a.getId()) + " \n");
+		accountOut += ("Handle: " + a.getHandle() + " \n");
+		accountOut += ("Description: " + a.getDescription() + " \n"); 
+		accountOut += ("Post count: " + Integer.toString(a.getNoOfPosts()) + " \n");
+		accountOut += ("Endorse count: " + Integer.toString(a.getNoOfEndorsements()) + " \n"); 
 		return accountOut;
 	}
 
@@ -188,6 +188,25 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void deletePost(int id) throws PostIDNotRecognisedException {
 		for (Account a : Accounts) {
 			if (a.hasPost(id)) {
+				Post p = a.getPost(id);
+				if (p.getPostType().equals("EndorsementPost")){
+                    Endorsement e = (Endorsement)p;
+                    int originalPostId = e.getOriginalPostId();
+                    for(Account a2 : Accounts){
+						if (a2.hasPost(originalPostId)){
+							a2.getPost(originalPostId).removeEndorsement();
+						}
+					}
+				}
+				if (p.getPostType().equals("CommentPost")){
+					Comment c = (Comment)p;
+					int originalPostId2 = c.getOriginalPostID();
+					for(Account a3 : Accounts){
+						if (a3.hasPost(originalPostId2)){
+							a3.getPost(originalPostId2).removeComment();
+						}
+					}
+				}
 				a.deletePost(id);
 			}
 		}
@@ -197,15 +216,38 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public String showIndividualPost(int id) throws PostIDNotRecognisedException {
-		// TODO Auto-generated method stub
-		return null;
+		for ( Account a : Accounts){
+			if (a.hasPost(id)){
+				Post post = a.getPost(id);
+				String postDetails = "";
+				postDetails += "ID: "+Integer.toString(id)+" \n";
+				postDetails += "Account: "+a.getHandle()+" \n";
+				postDetails += "No. endorsements: " + Integer.toString(post.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(post.getNumberOfComments()) + " \n";
+				postDetails += post.getMesssage() +"\n";
+				return postDetails;
+			}
+		}
+		throw new PostIDNotRecognisedException();
 	}
 
 	@Override
 	public StringBuilder showPostChildrenDetails(int id)
 			throws PostIDNotRecognisedException, NotActionablePostException {
-		// TODO Auto-generated method stub
-		return null;
+		for (Account a: Accounts){
+			if (a.hasPost(id)){
+				if (a.getPost(id).getPostType().equals("EndorsementPost") || a.getPost(id).getPostType().equals("DeletedPost")){
+					throw new NotActionablePostException();
+				}
+				Stringbuilder str = showIndividualPost(id);
+				StringBuilder postChildrenDetails = recursivePost(id, 0, str);
+				return postChildrenDetails;
+			}
+		}
+		throw new PostIDNotRecognisedException();
+	}
+
+	private StringBuilder recursivePost(int id, int depth, StringBuilder postChildrenDetails){
+		postChildrenDetails.append("| ")
 	}
 
 	@Override
