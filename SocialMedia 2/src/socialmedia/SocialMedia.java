@@ -87,7 +87,7 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		Iterator itr = Accounts.iterator();
+		Iterator<Account> itr = Accounts.iterator();
 		while (itr.hasNext()) {
 			Account a = (Account)itr.next();
 			if (a.getId() == id){
@@ -252,7 +252,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		throw new PostIDNotRecognisedException();
 	}
 
-	private StringBuilder recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
+	private void recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
 		// if depth = 0, the post is the original post, and so does not need to be altered
 		if (depth != 0){
 			// adds the indent for the | > that is put before each post 
@@ -277,7 +277,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		}
 		//base case, if number of comments is 0, exit recusion
 		if (post.getNumberOfComments()==0){
-			return postChildrenDetails;
+			return;
 		}
 		// loop add the indent for the | that goes below a post/comment
 		for(int i =0; i<depth; i++){
@@ -295,8 +295,6 @@ public class SocialMedia implements SocialMediaPlatform {
 				}
 			}
 		}
-		//this exits the function if a comment has been deleted.
-		return(postChildrenDetails);
 	}
 
 	@Override

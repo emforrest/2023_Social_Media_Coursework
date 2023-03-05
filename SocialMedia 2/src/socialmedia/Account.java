@@ -96,7 +96,7 @@ public class Account {
     }
 
     public void deletePost(int id) throws PostIDNotRecognisedException{
-        Iterator itr = posts.iterator();
+        Iterator<Post> itr = posts.iterator();
 		while (itr.hasNext()) {
 			Post p = (Post)itr.next();
             p.setMessage("The original content was removed from the system and is no longer available.");
