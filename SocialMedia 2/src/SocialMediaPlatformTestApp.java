@@ -66,7 +66,7 @@ public class SocialMediaPlatformTestApp {
 		String1 = platform.showPostChildrenDetails(postid);
 		System.out.println(String1);
 		} catch (Exception e) {
-			System.out.println("You fucked up");
+			System.out.println("Critical error");
 		}
 
 	}

@@ -245,7 +245,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				}
 				StringBuilder postChildrenDetails = new StringBuilder();
 				postChildrenDetails.append(showIndividualPost(id));
-				postChildrenDetails.append(recursivePost(a.getPost(id), 0, postChildrenDetails));
+				recursivePost(a.getPost(id), 0, postChildrenDetails);
 				return postChildrenDetails;
 			}
 		}
