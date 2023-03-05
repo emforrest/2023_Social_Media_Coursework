@@ -263,6 +263,8 @@ public class SocialMedia implements SocialMediaPlatform {
 			postChildrenDetails.append("| >");
 			// go through each line, and indent it before adding to the string builder 
 			Scanner scanner = new Scanner(showIndividualPost(post.getId()));
+			postChildrenDetails.append("\t");
+			postChildrenDetails.append(scanner.nextLine() + "\n");
 			while(scanner.hasNextLine()) {
 				for(int i =0; i<depth; i++){
 					postChildrenDetails.append("\t");
