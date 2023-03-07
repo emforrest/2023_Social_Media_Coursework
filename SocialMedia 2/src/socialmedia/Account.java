@@ -133,4 +133,12 @@ public class Account {
         }
         return comments;
     }
+
+    public ArrayList<Post> getPosts(){
+        return posts;
+    }
+
+    public static void reset(){
+        NO_OF_ACCOUNTS = 0;
+    }
 }

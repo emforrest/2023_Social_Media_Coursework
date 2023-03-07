@@ -63,4 +63,8 @@ public class Post {
     public void removeComment(){
         numberOfComments -= 1;
     }
+
+    public static void reset(){
+        NO_OF_POSTS = 0;
+    }
 }

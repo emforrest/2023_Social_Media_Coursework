@@ -69,6 +69,20 @@ public class SocialMediaPlatformTestApp {
 			System.out.println("Critical error");
 		}
 
+		try{
+		System.out.println(platform.getNumberOfAccounts());
+		platform.removeAccount("user1");
+		System.out.println(platform.getNumberOfAccounts());
+		} catch (Exception e){
+			System.out.println("Critical error");
+		}
+
+		platform.erasePlatform();
+		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
+		assert (platform.getTotalOriginalPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
+		assert (platform.getTotalCommentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
+		assert (platform.getTotalEndorsmentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
+
 	}
 
 }
