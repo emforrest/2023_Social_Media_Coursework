@@ -92,6 +92,7 @@ public class SocialMedia implements SocialMediaPlatform {
 			Account a = (Account)itr.next();
 			if (a.getId() == id){
 				a.deleteAllPosts();
+				a = null;
 				itr.remove();
 
 			}
@@ -104,6 +105,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		Account account = returnAccount(handle);
 		account.deleteAllPosts();
 		Accounts.remove(account);
+		account = null;
 
 	}
 
@@ -299,44 +301,90 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int getNumberOfAccounts() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Accounts.size();
 	}
 
 	@Override
 	public int getTotalOriginalPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		int totalOriginalPosts = 0;
+		for (Account a: Accounts){
+			for (Post p: a.getPosts()){
+				if (p.getPostType().equals("OriginalPost")){
+					totalOriginalPosts +=1;
+				}
+			}
+		}
+		return totalOriginalPosts;
 	}
 
 	@Override
 	public int getTotalEndorsmentPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		int totalEndorsementPosts = 0;
+		for (Account a: Accounts){
+			for (Post p: a.getPosts()){
+				if (p.getPostType().equals("EndorsementPost")){
+					totalEndorsementPosts +=1;
+				}
+			}
+		}
+		return totalEndorsementPosts;
 	}
 
 	@Override
 	public int getTotalCommentPosts() {
-		// TODO Auto-generated method stub
-		return 0;
+		int totalCommentPosts = 0;
+		for (Account a: Accounts){
+			ArrayList<Comment> comments = a.getComments();
+			totalCommentPosts+= comments.size();
+		}
+		return totalCommentPosts;
 	}
 
 	@Override
 	public int getMostEndorsedPost() {
-		// TODO Auto-generated method stub
-		return 0;
+		int mostPopularPostID = -1;
+		int maxNumberOfEndorsements = -1;
+		for( Account a : Accounts){
+			ArrayList<Post> posts = a.getPosts();
+			for (Post p : posts){
+				if (p.getNumberOfEndorsements() > maxNumberOfEndorsements){
+					maxNumberOfEndorsements = p.getNumberOfEndorsements();
+					mostPopularPostID = p.getId();
+				}
+			}
+		}
+		return mostPopularPostID;
 	}
 
 	@Override
 	public int getMostEndorsedAccount() {
-		// TODO Auto-generated method stub
-		return 0;
+		int maxNumberOfEndorsements = -1;
+		int mostPopularAccountId = -1;
+		for (Account a: Accounts){
+			int sumOfEndorsements = 0;
+			ArrayList<Post> posts = a.getPosts();
+			for (Post p : posts){
+				sumOfEndorsements += p.getNumberOfEndorsements();
+			}
+			if (sumOfEndorsements > maxNumberOfEndorsements){
+				maxNumberOfEndorsements = sumOfEndorsements;
+				mostPopularAccountId = a.getId();
+			}
+		}
+		return mostPopularAccountId;
 	}
 
 	@Override
 	public void erasePlatform() {
-		// TODO Auto-generated method stub
+		try{
+			for (Account a : Accounts){
+				removeAccount(a.getHandle());
+			}
+		} catch (HandleNotRecognisedException e){
 
+		}
+		Account.reset();
+		Post.reset();
 	}
 
 	@Override
