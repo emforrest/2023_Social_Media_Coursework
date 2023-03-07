@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class SocialMedia implements SocialMediaPlatform {
 	private ArrayList<Account> Accounts = new ArrayList<>();
 
-	public Account returnAccount(String handle) throws HandleNotRecognisedException {
+	private Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//Given an account handle, return the account object
 		for(Account a : Accounts) {
 			if (a.getHandle().equals(handle)) {
