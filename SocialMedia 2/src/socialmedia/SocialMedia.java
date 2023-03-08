@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * BadSocialMedia is a minimally compiling, but non-functioning implementor of
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  */
 public class SocialMedia implements SocialMediaPlatform {
 	private ArrayList<Account> Accounts = new ArrayList<>();
+	private ArrayList<Comment> deletedComments = new ArrayList<>();
 
 	private Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//Given an account handle, return the account object
@@ -91,7 +93,17 @@ public class SocialMedia implements SocialMediaPlatform {
 		while (itr.hasNext()) {
 			Account a = (Account)itr.next();
 			if (a.getId() == id){
-				a.deleteAllPosts();
+				
+				Iterator<Post> posts = a.getPosts().iterator();
+				while(posts.hasNext()){
+					Post p = posts.next();
+					try{
+						deletePost(p.getId());
+					} catch (PostIDNotRecognisedException e){
+				
+					}
+				}
+
 				a = null;
 				itr.remove();
 
@@ -103,7 +115,16 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
 		Account account = returnAccount(handle);
-		account.deleteAllPosts();
+		Iterator<Post> posts = account.getPosts().iterator();
+		while(posts.hasNext()){
+			Post p = posts.next();
+			try{
+				deletePost(p.getId());
+			} catch (PostIDNotRecognisedException e){
+
+			}
+			
+		}
 		Accounts.remove(account);
 		account = null;
 
@@ -215,7 +236,15 @@ public class SocialMedia implements SocialMediaPlatform {
 						}
 					}
 				}
+				for (Account a4: Accounts){
+					for (Comment c2 : a4.getComments()){
+						if (c2.getOriginalPostID() == id && p.getPostType().equals("CommentPost")){
+							deletedComments.add((Comment)p);
+						}
+					}
+				}
 				a.deletePost(id);
+				return;
 			}
 		}
 		throw new PostIDNotRecognisedException();
@@ -233,6 +262,17 @@ public class SocialMedia implements SocialMediaPlatform {
 				postDetails += "No. endorsements: " + Integer.toString(post.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(post.getNumberOfComments()) + " \n";
 				postDetails += post.getMesssage() +"\n";
 				return postDetails;
+			}
+		}
+		for (Comment deletedComment : deletedComments){
+			if (deletedComment.getId() == id){
+				String postDetails = "";
+				postDetails += "ID: "+Integer.toString(id)+" \n";
+				postDetails += "Account: None \n";
+				postDetails += "No. endorsements: " + Integer.toString(deletedComment.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(deletedComment.getNumberOfComments()) + " \n";
+				postDetails += deletedComment.getMesssage() +"\n";
+				return postDetails;
+
 			}
 		}
 		throw new PostIDNotRecognisedException();
@@ -255,6 +295,8 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	private void recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
+		System.out.println("in recursivePost");
+		ArrayList<Comment> childrenPosts = new ArrayList<>();
 		// if depth = 0, the post is the original post, and so does not need to be altered
 		if (depth != 0){
 			// adds the indent for the | > that is put before each post 
@@ -293,10 +335,24 @@ public class SocialMedia implements SocialMediaPlatform {
 			for(Comment c : Comments) {
 				if (c.getOriginalPostID() == post.getId()) {
 					// if a account has a comment linked aboce, call recursivePost on it, increasing the depth by 1
-					recursivePost(c, depth + 1, postChildrenDetails);
+					childrenPosts.add(c);
+					////recursivePost(c, depth + 1, postChildrenDetails);
 				}
 			}
 		}
+		for (Comment deletedComment : deletedComments){
+			if (deletedComment.getOriginalPostID() == post.getId()){
+				childrenPosts.add(deletedComment);
+			}
+
+		}
+		
+		///ArrayList<Comment> childrenPostsSorted = Collections.sort(childrenPosts, new compareByPostId());
+		childrenPosts.sort((o1, o2) -> (o1.getId()-o2.getId()));
+		for (Comment child : childrenPosts){
+			recursivePost(child, depth + 1, postChildrenDetails);
+		}
+
 	}
 
 	@Override
@@ -385,6 +441,10 @@ public class SocialMedia implements SocialMediaPlatform {
 		}
 		Account.reset();
 		Post.reset();
+		Iterator<Comment> itr = deletedComments.iterator();
+		while (itr.hasNext()){
+			itr.remove();
+		}
 	}
 
 	@Override

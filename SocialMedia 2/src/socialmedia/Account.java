@@ -99,19 +99,24 @@ public class Account {
         Iterator<Post> itr = posts.iterator();
 		while (itr.hasNext()) {
 			Post p = (Post)itr.next();
-            p.setMessage("The original content was removed from the system and is no longer available.");
-            p.setPostType("DeletedPost");
-            itr.remove();
-
+            if (p.getId() == id){
+                p.setMessage("The original content was removed from the system and is no longer available.");
+                p.setPostType("DeletedPost");
+                itr.remove();
+                return;
+            }
+            
             }
         throw new PostIDNotRecognisedException();
     }
     
     public void deleteAllPosts() {
-        for(Post p :posts){
+        Iterator<Post> itr = posts.iterator();
+		while (itr.hasNext()) {
+			Post p = (Post)itr.next();
             p.setMessage("The original content was removed from the system and is no longer available.");
             p.setPostType("DeletedPost");
-            posts.remove(p);
+            itr.remove();            
         }
     }
 
