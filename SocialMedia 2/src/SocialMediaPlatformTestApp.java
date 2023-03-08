@@ -38,6 +38,7 @@ public class SocialMediaPlatformTestApp {
 		int id3; 
 		int postid3;
 		int postid4;
+		int postid5;
 		StringBuilder String1;
 		try {
 			id = platform.createAccount("my_handle");
@@ -61,8 +62,10 @@ public class SocialMediaPlatformTestApp {
 		postid2 = platform.commentPost("user2", postid, "good morning!");
 		postid3 = platform.commentPost("user1", postid2, "how are you?");
 		postid4 = platform.commentPost("user2", postid3, "please work???");
+		postid5 = platform.commentPost("user1", postid2, "should come after the deleted one");
 		id3 = platform.createAccount("user3");
 		postid4 = platform.commentPost("user3", postid, "morning!");
+		platform.deletePost(postid3);
 		String1 = platform.showPostChildrenDetails(postid);
 		System.out.println(String1);
 		} catch (Exception e) {
