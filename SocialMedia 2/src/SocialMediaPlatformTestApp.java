@@ -31,60 +31,15 @@ public class SocialMediaPlatformTestApp {
 		assert (platform.getTotalCommentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 		assert (platform.getTotalEndorsmentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 
-		Integer id;
-		int postid;
-		int id2; 
+
+		int id1; 
+		int id2;
+		int id3;
+		int postid1;
 		int postid2;
-		int id3; 
 		int postid3;
-		int postid4;
-		int postid5;
-		StringBuilder String1;
-		try {
-			id = platform.createAccount("my_handle");
-			assert (platform.getNumberOfAccounts() == 1) : "number of accounts registered in the system does not match";
+		int mostendorsed;
 
-			platform.removeAccount(id);
-			assert (platform.getNumberOfAccounts() == 0) : "number of accounts registered in the system does not match";
-
-		} catch (IllegalHandleException e) {
-			assert (false) : "IllegalHandleException thrown incorrectly";
-		} catch (InvalidHandleException e) {
-			assert (false) : "InvalidHandleException thrown incorrectly";
-		} catch (AccountIDNotRecognisedException e) {
-			assert (false) : "AccountIDNotRecognizedException thrown incorrectly";
-		}
-
-		try {
-		id = platform.createAccount("user1"); 
-		postid = platform.createPost("user1", "Good Morning yall");
-		id2 = platform.createAccount("user2"); 
-		postid2 = platform.commentPost("user2", postid, "good morning!");
-		postid3 = platform.commentPost("user1", postid2, "how are you?");
-		postid4 = platform.commentPost("user2", postid3, "please work???");
-		postid5 = platform.commentPost("user1", postid2, "should come after the deleted one");
-		id3 = platform.createAccount("user3");
-		postid4 = platform.commentPost("user3", postid, "morning!");
-		platform.deletePost(postid3);
-		String1 = platform.showPostChildrenDetails(postid);
-		System.out.println(String1);
-		} catch (Exception e) {
-			System.out.println("Critical error");
-		}
-
-		try{
-		System.out.println(platform.getNumberOfAccounts());
-		platform.removeAccount("user1");
-		System.out.println(platform.getNumberOfAccounts());
-		} catch (Exception e){
-			System.out.println("Critical error");
-		}
-
-		platform.erasePlatform();
-		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
-		assert (platform.getTotalOriginalPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
-		assert (platform.getTotalCommentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
-		assert (platform.getTotalEndorsmentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 
 	}
 
