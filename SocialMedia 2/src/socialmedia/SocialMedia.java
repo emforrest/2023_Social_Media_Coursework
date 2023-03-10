@@ -99,6 +99,7 @@ public class SocialMedia implements SocialMediaPlatform {
 					Post p = posts.next();
 					try{
 						deletePost(p.getId());
+						posts.remove();
 					} catch (PostIDNotRecognisedException e){
 				
 					}
@@ -115,9 +116,9 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
 		Account account = returnAccount(handle);
-		Iterator<Post> posts = account.getPosts().iterator();
-		while(posts.hasNext()){
-			Post p = posts.next();
+		ArrayList<Post> posts = account.getPosts();
+		while(!posts.isEmpty()){
+			Post p = posts.get(0);
 			try{
 				deletePost(p.getId());
 			} catch (PostIDNotRecognisedException e){
@@ -139,7 +140,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				throw new IllegalHandleException();
 			}
 		}
-		if ((newHandle.isEmpty()) || (newHandle.length() < 30) || (newHandle.contains(" "))) {
+		if ((newHandle.isEmpty()) || (newHandle.length() > 30) || (newHandle.contains(" "))) {
 			throw new InvalidHandleException();
 		}
 		a.setHandle(newHandle);
@@ -295,7 +296,6 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	private void recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
-		System.out.println("in recursivePost");
 		ArrayList<Comment> childrenPosts = new ArrayList<>();
 		// if depth = 0, the post is the original post, and so does not need to be altered
 		if (depth != 0){
@@ -433,11 +433,13 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void erasePlatform() {
 		try{
-			for (Account a : Accounts){
+			while (!Accounts.isEmpty()) {
+				Account a = Accounts.get(0);
 				removeAccount(a.getHandle());
 			}
+			System.out.println(Accounts.size());
 		} catch (HandleNotRecognisedException e){
-
+			System.out.println("problem");
 		}
 		Account.reset();
 		Post.reset();
