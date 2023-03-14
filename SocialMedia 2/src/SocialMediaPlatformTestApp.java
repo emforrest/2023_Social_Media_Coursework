@@ -1,7 +1,11 @@
 import socialmedia.AccountIDNotRecognisedException;
+import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
 import socialmedia.IllegalHandleException;
 import socialmedia.InvalidHandleException;
+import socialmedia.InvalidPostException;
+import socialmedia.NotActionablePostException;
+import socialmedia.PostIDNotRecognisedException;
 import socialmedia.SocialMediaPlatform;
 
 /**
@@ -37,10 +41,35 @@ public class SocialMediaPlatformTestApp {
 		int id3;
 		int postid1;
 		int postid2;
-		int postid3;
+		int postid3 = 12;
+		int postid4;
 		int mostendorsed;
 
+		try{
+			id1 = platform.createAccount("handle1", "vrvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+			id2 = platform.createAccount("handle2");
+			postid1 = platform.createPost("handle1", "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+			postid4 = platform.endorsePost("handle1", postid1);
+			postid2 = platform.commentPost("handle2", postid1, "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+			platform.updateAccountDescription("a", "boring short description");
 
+		} catch (IllegalHandleException e){
+			System.out.println("IllegalHandle");
+		} catch (InvalidHandleException e2){
+			System.out.println("InvalidHandle");
+		} catch (HandleNotRecognisedException e3){
+			System.out.println("HandleNotRecognised");
+		//} catch (AccountIDNotRecognisedException e4){
+			//System.out.println("AccountIDNotRecognised");
+		} catch (InvalidPostException e5){
+			System.out.println("InvalidPost");
+		} catch (NotActionablePostException e6){
+			System.out.println("NotActionablePost");
+		} catch (PostIDNotRecognisedException e7){
+			System.out.println("PostIDNotRecognised");
+		}
+
+		
 	}
 
 }

@@ -107,9 +107,11 @@ public class SocialMedia implements SocialMediaPlatform {
 
 				a = null;
 				itr.remove();
+				return;
 
 			}
 		}
+		throw new AccountIDNotRecognisedException();
 
 	}
 
