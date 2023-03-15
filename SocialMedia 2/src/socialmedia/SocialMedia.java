@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
 /**
  * BadSocialMedia is a minimally compiling, but non-functioning implementor of
@@ -439,7 +443,6 @@ public class SocialMedia implements SocialMediaPlatform {
 				Account a = Accounts.get(0);
 				removeAccount(a.getHandle());
 			}
-			System.out.println(Accounts.size());
 		} catch (HandleNotRecognisedException e){
 			System.out.println("problem");
 		}
@@ -453,14 +456,44 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void savePlatform(String filename) throws IOException {
-		// TODO Auto-generated method stub
-
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
+		out.writeObject(Accounts);
+		out.writeObject(deletedComments);
+		Integer[] Numbers = {Post.getNO_OF_POSTS(), Account.getNO_OF_ACCOUNTS()};
+		out.writeObject(Numbers);
+		out.close();
 	}
 
 	@Override
 	public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+		erasePlatform();
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename)); 
+		while (true) {
+			try {
+				Object obj = in.readObject();
+				if (obj instanceof ArrayList) {
+					ArrayList lst = (ArrayList) obj;
+					if (lst.isEmpty()) {
+						continue;
+					}
+					if (lst.get(0) instanceof Account) {
+						Accounts = (ArrayList<Account>) lst;
+					}
+					if (lst.get(0) instanceof Comment) {
+						deletedComments = (ArrayList<Comment>) lst;
+					}
+				}
+				if (obj instanceof Integer[]) {
+					Integer[] intlst = (Integer[]) obj;
+					Post.setNO_OF_POSTS(intlst[0]);
+					Account.setNO_OF_ACOUNTS(intlst[1]);
+					}
+			} catch (Exception e) {
+				break;
+			}
 
+		}
+		in.close();
 	}
 
 }
