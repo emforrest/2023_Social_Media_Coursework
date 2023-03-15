@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import socialmedia.AccountIDNotRecognisedException;
 import socialmedia.HandleNotRecognisedException;
 import socialmedia.SocialMedia;
@@ -51,7 +53,14 @@ public class SocialMediaPlatformTestApp {
 			postid1 = platform.createPost("handle1", "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 			postid4 = platform.endorsePost("handle1", postid1);
 			postid2 = platform.commentPost("handle2", postid1, "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-			platform.updateAccountDescription("a", "boring short description");
+			platform.updateAccountDescription("handle1", "boring short description");
+			System.out.println(platform.getNumberOfAccounts());
+			System.out.println(platform.showIndividualPost(postid2));
+			platform.savePlatform("hello");
+			platform.erasePlatform();
+			platform.loadPlatform("hello");
+			System.out.println(platform.getNumberOfAccounts());
+			System.out.println(platform.showIndividualPost(postid2));
 
 		} catch (IllegalHandleException e){
 			System.out.println("IllegalHandle");
@@ -67,9 +76,11 @@ public class SocialMediaPlatformTestApp {
 			System.out.println("NotActionablePost");
 		} catch (PostIDNotRecognisedException e7){
 			System.out.println("PostIDNotRecognised");
+		} catch (IOException e8) {
+			System.out.println("InvalidFilename");
+		} catch (ClassNotFoundException e9) {
+			System.out.println("ClassNotFound");
 		}
-
-		
 	}
 
 }

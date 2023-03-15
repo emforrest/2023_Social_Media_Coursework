@@ -1,11 +1,12 @@
 package socialmedia;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.Serializable;
 /**
  * The class that contains all of the user account objects. These consist of a unique ID, a handle, a description, an arraylist of posts, comments
  * as well as endorsements 
  */
-public class Account {
+public class Account implements Serializable {
     // declare all the attributes
     private static int NO_OF_ACCOUNTS = 0; 
     private int id;
@@ -145,5 +146,8 @@ public class Account {
 
     public static void reset(){
         NO_OF_ACCOUNTS = 0;
+    }
+    public static void setNO_OF_ACOUNTS(Integer i) {
+        NO_OF_ACCOUNTS = i;
     }
 }

@@ -1,6 +1,7 @@
 package socialmedia;
+import java.io.Serializable;
 
-public class Post {
+public class Post implements Serializable{
     private static int NO_OF_POSTS = 0; 
     protected int postId; 
     protected String message; 
@@ -66,5 +67,9 @@ public class Post {
 
     public static void reset(){
         NO_OF_POSTS = 0;
+    }
+
+    public static void setNO_OF_POSTS(Integer i){
+        NO_OF_POSTS = i;
     }
 }
