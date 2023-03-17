@@ -32,16 +32,6 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	@Override
-	/**
-	 * This fuction creates an account given a handle but no description
-	 * It checks that the handle is valid and legal (not in use), and then returns the ID of the created account
-	 * 
-	 * 
-	 * @param handle - String: the handle of the account that the user wishes to create
-	 * 
-	 * @return id - int: the id of the created account
-	 * 
-	 */
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
 		//check if the account handle is valid 
 		if ((handle.isEmpty()) || (handle.length() > 30) || (handle.contains(" "))) {
@@ -327,7 +317,16 @@ public class SocialMedia implements SocialMediaPlatform {
 		}
 		//base case, if number of comments is 0, exit recusion
 		if (post.getNumberOfComments()==0){
-			return;
+			//check if there is a deleted comment; this may have comments under it which should still be displayed
+			boolean hasDeletedComment = false;
+			for (Comment c: deletedComments){
+				if (c.getOriginalPostID() == post.getId()){
+					hasDeletedComment = true;
+				}
+			}
+			if (!hasDeletedComment){
+				return;
+			}
 		}
 		// loop add the indent for the | that goes below a post/comment
 		for(int i =0; i<depth; i++){
@@ -448,9 +447,8 @@ public class SocialMedia implements SocialMediaPlatform {
 		}
 		Account.reset();
 		Post.reset();
-		Iterator<Comment> itr = deletedComments.iterator();
-		while (itr.hasNext()){
-			itr.remove();
+		while (!deletedComments.isEmpty()){
+			deletedComments.remove(0);
 		}
 	}
 

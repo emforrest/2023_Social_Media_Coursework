@@ -1,5 +1,9 @@
 package socialmedia;
 import java.io.Serializable;
+/**
+ * The class that contains Post objects, which is a superclass for Endorsement and Comment objects, 
+ * 
+ */
 
 public class Post implements Serializable{
     private static int NO_OF_POSTS = 0; 

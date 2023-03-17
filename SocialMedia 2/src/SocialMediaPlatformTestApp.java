@@ -48,21 +48,10 @@ public class SocialMediaPlatformTestApp {
 		int mostendorsed;
 
 		try{
-			id1 = platform.createAccount("handle1", "vrvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-			id2 = platform.createAccount("handle2");
-			postid1 = platform.createPost("handle1", "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-			postid4 = platform.endorsePost("handle1", postid1);
-			postid2 = platform.commentPost("handle2", postid1, "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-			platform.updateAccountDescription("handle1", "boring short description");
-			System.out.println(platform.getNumberOfAccounts());
-			System.out.println(platform.showIndividualPost(postid2));
-			platform.savePlatform("hello");
-			platform.erasePlatform();
 			platform.loadPlatform("hello");
-			System.out.println(platform.getNumberOfAccounts());
-			System.out.println(platform.showIndividualPost(postid2));
+			
 
-		} catch (IllegalHandleException e){
+	/*	} catch (IllegalHandleException e){
 			System.out.println("IllegalHandle");
 		} catch (InvalidHandleException e2){
 			System.out.println("InvalidHandle");
@@ -71,13 +60,13 @@ public class SocialMediaPlatformTestApp {
 		//} catch (AccountIDNotRecognisedException e4){
 			//System.out.println("AccountIDNotRecognised");
 		} catch (InvalidPostException e5){
-			System.out.println("InvalidPost");
+			//System.out.println("InvalidPost");
 		} catch (NotActionablePostException e6){
-			System.out.println("NotActionablePost");
+			//System.out.println("NotActionablePost");
 		} catch (PostIDNotRecognisedException e7){
-			System.out.println("PostIDNotRecognised");
+			//System.out.println("PostIDNotRecognised");*/
 		} catch (IOException e8) {
-			System.out.println("InvalidFilename");
+			System.out.println("IOexception");
 		} catch (ClassNotFoundException e9) {
 			System.out.println("ClassNotFound");
 		}

@@ -5,7 +5,10 @@ import java.io.Serializable;
 /**
  * The class that contains all of the user account objects. These consist of a unique ID, a handle, a description, an arraylist of posts, comments
  * as well as endorsements 
+ * 
+ * @author Jack Skinner, Eleanor Forrest
  */
+
 public class Account implements Serializable {
     // declare all the attributes
     private static int NO_OF_ACCOUNTS = 0; 
@@ -16,18 +19,37 @@ public class Account implements Serializable {
     // We create an array list using the post, comment and endorsement classes for all of the posts linked to the account object. 
     private ArrayList<Post> posts = new ArrayList<>();
 
-    //declare our constructors, overloading for accounting if a description is provided or not, defaulting description to a blank string. 
+    /**
+     * The first constructor for the account does not set a description and instead intitalises it to an empty string
+     * 
+     *  @param handle - String: the handle of the account that the user wishes to create
+     * 
+     * */
     public Account(String handle) {
         this.handle = handle;
         this.id = ++NO_OF_ACCOUNTS;
         this.description = ""; 
     }
+
+    /**
+     * The second constructor for the account takes the description as a parameter as well as the handle
+     * 
+     *  @param handle - String: the handle of the account that the user wishes to create
+     *  @param description - String: the description for the account that the user wishes to create
+     * 
+     * */
     public Account(String handle, String description) {
         this.handle = handle; 
         this.id = ++NO_OF_ACCOUNTS;
         this.description = description;
     }
     
+    /**
+     * Create a Post object associated with this account, adding it to the list of posts
+     * 
+     * @param message - String: the message that the post should contain
+     * 
+     * */
     public int makePost(String message) {
         Post p = new Post(message);
         posts.add(p); 
