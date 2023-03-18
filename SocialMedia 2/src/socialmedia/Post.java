@@ -13,28 +13,62 @@ public class Post implements Serializable{
     protected int numberOfEndorsements = 0;
     protected int numberOfComments = 0;
 
-    //constructor to create a post 
+    /**
+     * The constructor for the post class
+     * @param message - String: The message that the post will contain
+     */ 
     public Post(String message) {
         this.message = message; 
+        // The ID of the post is set as how many posts were created before it. 
         postId = ++NO_OF_POSTS; 
     }
 
-    //static class getter for NO_OF_POSTS attribute
+    /**
+     * getter, returns the total number of posts ever created.
+     * @return NO_OF_POSTS - int: number of posts ever created
+     */
     public static int getNO_OF_POSTS() {
         return NO_OF_POSTS;
     }
 
-    //define the getters 
+    /**
+     * getter, returns the message of a post
+     * @return message - String: the message of the post
+     */
     public String getMesssage() {
         return message;
     }
 
+    /** 
+     * getter, returns the id of the post
+     * @return postId - int: the id of the post
+     */
     public int getId(){
         return postId;
     }
 
+    /**
+     * getter, returns the type of the post (Original, Comment, Endorsement or Deleted)
+     * @return postType - String: the type of the post
+     */
     public String getPostType(){
         return postType;
+    }
+
+    /**
+     * getter, returns the number of Endorsements a post has recived 
+     * @return numberOfEndorsements - int: the number of endorsements recived by a post
+     */
+    public int getNumberOfEndorsements(){
+        return numberOfEndorsements;
+    }
+
+    /**
+     * getter, returns the number of comments a post has recived
+     * @return numberOfComments - int: the number of comments a post has recived
+     */
+    public int getNumberOfComments(){
+        return numberOfComments;
     }
 
     public void setMessage(String message){
@@ -45,20 +79,12 @@ public class Post implements Serializable{
         this.postType = postType;
     }
 
-    public int getNumberOfEndorsements(){
-        return numberOfEndorsements;
-    }
-
     public void addEndorsement(){
         numberOfEndorsements += 1;
     }
 
     public void removeEndorsement(){
         numberOfEndorsements -= 1;
-    }
-
-    public int getNumberOfComments(){
-        return numberOfComments;
     }
 
     public void addComment(){
