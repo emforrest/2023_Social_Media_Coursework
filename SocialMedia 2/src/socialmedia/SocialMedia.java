@@ -137,7 +137,9 @@ public class SocialMedia implements SocialMediaPlatform {
 	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
+		//this also uses the return account funciton
 		Account a = returnAccount((oldHandle));
+		//loops thorugh all the accounts, if another account exists with the new handle, throws illegal handle
 		for (Account b : Accounts) {
 			if (b.getHandle().equals(newHandle)) {
 				throw new IllegalHandleException();
