@@ -82,35 +82,42 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
+		// uses the iterator, allowing us to remove an account while iterating through it
 		Iterator<Account> itr = Accounts.iterator();
 		while (itr.hasNext()) {
+			// if the account found in the iterator, has the id we are looking to delete, start deleting.
 			Account a = (Account)itr.next();
 			if (a.getId() == id){
-				
-				Iterator<Post> posts = a.getPosts().iterator();
-				while(posts.hasNext()){
-					Post p = posts.next();
+				// go through each post, and delete it, using the deletePost method.
+				ArrayList<Post> posts = a.getPosts();
+				while(!posts.isEmpty()){
+					Post p = posts.get(0);
+					//deletepost throws idnotrecognised, this will never be raised, but we need to handle it.
 					try{
 						deletePost(p.getId());
-						posts.remove();
 					} catch (PostIDNotRecognisedException e){
-				
+		
 					}
+					
 				}
-
+				// this sets the account to null, and removes it from the iterator. It will be removed from the heap by the garbage collector.
 				a = null;
 				itr.remove();
+				//exits the function once an account has been deleted.
 				return;
 
 			}
 		}
+		// throws id not recognised if no account is found with the matching id and the loop is never exited.
 		throw new AccountIDNotRecognisedException();
 
 	}
 
 	@Override
 	public void removeAccount(String handle) throws HandleNotRecognisedException {
+		//here we have made a private function to returnAccount given a handle, we use it.
 		Account account = returnAccount(handle);
+		//as with id, the code is exactly the same for removing posts.
 		ArrayList<Post> posts = account.getPosts();
 		while(!posts.isEmpty()){
 			Post p = posts.get(0);
