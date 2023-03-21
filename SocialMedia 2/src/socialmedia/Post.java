@@ -4,6 +4,7 @@ import java.io.Serializable;
  * The class that contains Post objects, which is a superclass for Endorsement and Comment objects. Objects have an ID, 
  * a message, a Type, their number of endorsements and number of comments. The class has the attribute NO_OF_POSTS, which is used to create IDs.
  * 
+ * @author Jack Skinner, Eleanor Forrest
  */
 
  //attributes.
