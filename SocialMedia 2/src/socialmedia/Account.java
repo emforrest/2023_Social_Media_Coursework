@@ -257,4 +257,6 @@ public class Account implements Serializable {
     public static void setNO_OF_ACOUNTS(Integer i) {
         NO_OF_ACCOUNTS = i;
     }
+
+    
 }
