@@ -1,24 +1,25 @@
 package socialmedia;
 
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.Iterator;
-import java.util.ArrayList;
+//Imports
+import java.io.IOException; //thrown if there is an issue saving or loading the file
+import java.util.Scanner; //used when generating the string of posts for showPostChildrenDetails()
+import java.util.Iterator; //used to iterate through ArrayList objects 
+import java.util.ArrayList; //used to store a dynamic list of objects
+//The following imports are used to handle saving and loading the platform as a byte stream
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 
 /**
- * BadSocialMedia is a minimally compiling, but non-functioning implementor of
- * the SocialMediaPlatform interface.
+ * SocialMedia is a functioning implementation of the SocialMediaPlatform interface providing the backend for this project.
  * 
- * @author Diogo Pacheco
- * @version 1.0
+ * @author Jack Skinner and Eleanor Forrest
+ * 
  */
 public class SocialMedia implements SocialMediaPlatform {
-	private ArrayList<Account> Accounts = new ArrayList<>();
-	private ArrayList<Comment> deletedComments = new ArrayList<>();
+	private ArrayList<Account> Accounts = new ArrayList<>(); //contains all the Account objects that exist in the platform
+	private ArrayList<Comment> deletedComments = new ArrayList<>(); //contains any Comment objects that have been deleted, so that any successive comments can still refer to them, thus preventing them from being removed by the garbage collector.
 
 	private Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//Given an account handle, return the account object
