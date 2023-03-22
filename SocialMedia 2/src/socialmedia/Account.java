@@ -110,11 +110,19 @@ public class Account implements Serializable {
     }
 
     /**
-     * void method, used whenever an endorsment post is created.
+     * void method, used whenever an endorsement post referring to a post on this account is created.
      * increments the noOfEndorsements attribute of the account object.
      */
     public void endorsed() {
         noOfEndorsements += 1;
+    }
+
+    /**
+     * void method, used whenever an endorsement post referring to a post on this account is deleted
+     * decrements the noOfEndorsements attribute of the account object
+     */
+    public void unendorsed(){
+        noOfEndorsements -= 1;
     }
 
     /**
