@@ -279,17 +279,6 @@ public class SocialMedia implements SocialMediaPlatform {
 				return postDetails;
 			}
 		}
-		//the requested post may be a deleted comment, if this method is called during showPostChildrenDetails. If so the message should be a dummy and there is no associated account
-		for (Comment deletedComment : deletedComments){
-			if (deletedComment.getId() == id){
-				String postDetails = "";
-				postDetails += "ID: "+Integer.toString(id)+" \n";
-				postDetails += "Account: None \n";
-				postDetails += "No. endorsements: " + Integer.toString(deletedComment.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(deletedComment.getNumberOfComments()) + " \n";
-				postDetails += deletedComment.getMesssage() +"\n";
-				return postDetails;
-			}
-		}
 		throw new PostIDNotRecognisedException();
 	} 
 
@@ -320,18 +309,24 @@ public class SocialMedia implements SocialMediaPlatform {
 			//put in the | > that links a post to it's reply
 			postChildrenDetails.append("| >");
 			// go through each line, and indent it before adding to the string builder 
-			Scanner scanner = new Scanner(showIndividualPost(post.getId()));
-			postChildrenDetails.append("\t");
-			postChildrenDetails.append(scanner.nextLine() + "\n");
-			while(scanner.hasNextLine()) {
-				for(int i =0; i<depth; i++){
-					postChildrenDetails.append("\t");
-				}
-				//after indenting each line, add it to the stringbuilder
+			if (post.getPostType() != "DeletedPost") {
+				Scanner scanner = new Scanner(showIndividualPost(post.getId()));
+				postChildrenDetails.append("\t");
 				postChildrenDetails.append(scanner.nextLine() + "\n");
-			}
+				while(scanner.hasNextLine()) {
+					for(int i =0; i<depth; i++){
+						postChildrenDetails.append("\t");
+					}
+				//after indenting each line, add it to the stringbuilder
+					postChildrenDetails.append(scanner.nextLine() + "\n");
+				}
 			//close the scanner
 			scanner.close();
+			}
+			else {
+				postChildrenDetails.append("\t");
+				postChildrenDetails.append(post.getMesssage() + "\n");
+			}
 		}
 		//base case, if number of comments is 0, exit recusion
 		if (post.getNumberOfComments()==0){

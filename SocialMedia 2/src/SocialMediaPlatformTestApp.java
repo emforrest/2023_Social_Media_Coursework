@@ -42,16 +42,20 @@ public class SocialMediaPlatformTestApp {
 		int id2;
 		int id3;
 		int postid1;
-		int postid2;
+		int postid2 = 0;
 		int postid3 = 12;
 		int postid4;
 		int mostendorsed;
 
 		try{
-			platform.loadPlatform("hello");
-			
-
-	/*	} catch (IllegalHandleException e){
+			id1 = platform.createAccount("user1");
+			id2 = platform.createAccount("user2");
+			postid1 = platform.createPost("user1", "OrignalPost");
+			postid2 = platform.commentPost("user2", postid1, "comment");
+			postid3 = platform.commentPost("user2", postid2, "comment2");
+			platform.deletePost(postid2);
+			System.out.println(platform.showPostChildrenDetails(postid1));
+		} catch (IllegalHandleException e){
 			System.out.println("IllegalHandle");
 		} catch (InvalidHandleException e2){
 			System.out.println("InvalidHandle");
@@ -65,10 +69,16 @@ public class SocialMediaPlatformTestApp {
 			//System.out.println("NotActionablePost");
 		} catch (PostIDNotRecognisedException e7){
 			//System.out.println("PostIDNotRecognised");*/
-		} catch (IOException e8) {
-			System.out.println("IOexception");
-		} catch (ClassNotFoundException e9) {
-			System.out.println("ClassNotFound");
+		//} catch (IOException e8) {
+			//System.out.println("IOexception");
+		//} catch (ClassNotFoundException e9) {
+			//System.out.println("ClassNotFound");
+		}
+
+		try {
+			System.out.println(platform.showIndividualPost(postid2));
+		} catch (PostIDNotRecognisedException e) {
+			System.out.println("postnotfound");
 		}
 	}
 
