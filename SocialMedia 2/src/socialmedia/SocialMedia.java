@@ -279,17 +279,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				return postDetails;
 			}
 		}
-		//the requested post may be a deleted comment, if this method is called during showPostChildrenDetails. If so the message should be a dummy and there is no associated account
-		for (Comment deletedComment : deletedComments){
-			if (deletedComment.getId() == id){
-				String postDetails = "";
-				postDetails += "ID: "+Integer.toString(id)+" \n";
-				postDetails += "Account: None \n";
-				postDetails += "No. endorsements: " + Integer.toString(deletedComment.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(deletedComment.getNumberOfComments()) + " \n";
-				postDetails += deletedComment.getMesssage() +"\n";
-				return postDetails;
-			}
-		}
+		
 		throw new PostIDNotRecognisedException();
 	} 
 
