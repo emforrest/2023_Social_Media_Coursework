@@ -3,8 +3,8 @@ package socialmedia;
 //Imports
 import java.io.IOException; //thrown if there is an issue saving or loading the file
 import java.util.Scanner; //used when generating the string of posts for showPostChildrenDetails()
-import java.util.Iterator; //used to iterate through ArrayList objects 
 import java.util.ArrayList; //used to store a dynamic list of objects
+import java.util.Iterator; //used to iterate through ArrayList objects 
 //The following imports are used to handle saving and loading the platform as a byte stream
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,18 +12,18 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 
 /**
- * SocialMedia is a functioning implementation of the SocialMediaPlatform interface providing the backend for this project.
+ * SocialMedia is a functioning implementation of the SocialMediaPlatform interface providing the backend for this project
  * 
  * @author Jack Skinner and Eleanor Forrest
  * 
  */
 public class SocialMedia implements SocialMediaPlatform {
 	private ArrayList<Account> accounts = new ArrayList<>(); //contains all the Account objects that exist in the platform
-	private ArrayList<Comment> deletedComments = new ArrayList<>(); //contains any Comment objects that have been deleted, so that any successive comments can still refer to them, thus preventing them from being removed by the garbage collector.
+	private ArrayList<Comment> deletedComments = new ArrayList<>(); //contains any Comment objects that have been deleted, so that any successive comments can still refer to them, thus preventing them from being removed by the garbage collector
 
 
 	private Account returnAccount(String handle) throws HandleNotRecognisedException {
-		//Given an account handle, return the account object
+		//given an account handle, return the account object
 		for(Account a : accounts) {
 			if (a.getHandle().equals(handle)) {
 				return a;
@@ -47,7 +47,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		//if all checks are passed, create a new account with the verified handle
 		Account newAccount = new Account(handle); 
 		accounts.add(newAccount); 
-		//return the id of the new account.
+		//return the ID of the new account.
 		return newAccount.getId();
 	}	
 
@@ -55,7 +55,7 @@ public class SocialMedia implements SocialMediaPlatform {
 	public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
 		//call the original createAccount method with only the handle
 		int id = createAccount(handle);
-		//loop through each account in accounts, to find the account that was just created using the id
+		//loop through each account in accounts, to find the account that was just created using the ID
 		for (Account a : accounts) {
 			if (a.getId() == id) {
 				//set the description of this account to the description given in the input
@@ -67,10 +67,10 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void removeAccount(int id) throws AccountIDNotRecognisedException {
-		//Iterator is used to iterate through the accounts arayList and delete items without index errors
+		//Iterator is used to iterate through the accounts ArrayList and delete items without index errors
 		Iterator<Account> itr = accounts.iterator();
 		while (itr.hasNext()) {
-			//if the current account has the id we are looking to delete, start deleting
+			//if the current account has the ID we are looking to delete, start deleting
 			Account a = (Account)itr.next();
 			if (a.getId() == id){
 				//go through each post owned by this account and delete it
@@ -91,7 +91,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				return;
 			}
 		}
-		//throw AccountIDNotRecognisedException if no account is found with the matching id 
+		//throw AccountIDNotRecognisedException if no account is found with the matching ID 
 		throw new AccountIDNotRecognisedException();
 
 	}
@@ -279,7 +279,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				return postDetails;
 			}
 		}
-		//the requested post may be a deleted comment, if this method is called during showPostChildrenDetails. If so the message should be a dummy and there is no associated account
+		//the requested post may be a deleted comment, if this method is called during showPostChildrenDetails(). If so the message should be a dummy and there is no associated account
 		for (Comment deletedComment : deletedComments){
 			if (deletedComment.getId() == id){
 				String postDetails = "";

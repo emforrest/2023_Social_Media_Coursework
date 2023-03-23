@@ -1,16 +1,17 @@
 package socialmedia;
-import java.io.Serializable;
+
+//Imports
+import java.io.Serializable; //allows the state of the platform to be saved as a byte stream
+
 /**
- * The class that contains Post objects, which is a superclass for Endorsement and Comment objects. Objects have an ID, 
- * a message, a Type, their number of endorsements and number of comments. The class has the attribute NO_OF_POSTS, which is used to create IDs.
+ * The class that contains Post objects, which is a superclass for Endorsement and Comment objects. Objects have an ID, message, type, number of endorsements and number of comments. The class has the attribute NO_OF_POSTS, which is used to create IDs
  * 
  * @author Jack Skinner, Eleanor Forrest
  */
 
- //attributes.
 public class Post implements Serializable{
-    //NO_OF_POSTS is not the number of posts in the platoform, it's the number of posts ever created. used for IDs
-    private static int NO_OF_POSTS = 0; 
+    //Attributes
+    private static int NO_OF_POSTS = 0; //NO_OF_POSTS is the total number of posts created rather than the number of posts currently in the platform, used for generating unique IDs
     protected int postId; 
     protected String message; 
     protected String postType = "OriginalPost"; 
@@ -23,12 +24,47 @@ public class Post implements Serializable{
      */ 
     public Post(String message) {
         this.message = message; 
-        // The ID of the post is set as how many posts were created before it. 
+        //The ID of the post is set to how many posts were created before it 
         postId = ++NO_OF_POSTS; 
     }
 
     /**
-     * getter, returns the total number of posts ever created.
+     * void method, used when a post is endorsed  to increment its number of endorsements
+     */
+    public void addEndorsement(){
+        numberOfEndorsements += 1;
+    }
+
+    /**
+     * void method, used when an endorsement is deleted to decrement its number of endorsements
+     */
+    public void removeEndorsement(){
+        numberOfEndorsements -= 1;
+    }
+
+    /**
+     * void method, used when a post receives a comment to increment its number of comments
+     */
+    public void addComment(){
+        numberOfComments += 1;
+    }
+
+    /**
+     * void method, used when a post's comment is deleted to decrement its number of comments
+     */
+    public void removeComment(){
+        numberOfComments -= 1;
+    }
+
+    /**
+     * void method, called when the platform is erased. Resets NO_OF_POSTS to 0 so IDs start from 1
+     */
+    public static void reset(){
+        NO_OF_POSTS = 0;
+    }
+
+    /**
+     * getter, returns the total number of posts created on the platform
      * @return NO_OF_POSTS - int: number of posts ever created
      */
     public static int getNO_OF_POSTS() {
@@ -36,7 +72,7 @@ public class Post implements Serializable{
     }
 
     /**
-     * getter, returns the message of a post
+     * getter, returns a post's message
      * @return message - String: the message of the post
      */
     public String getMesssage() {
@@ -44,15 +80,15 @@ public class Post implements Serializable{
     }
 
     /** 
-     * getter, returns the id of the post
-     * @return postId - int: the id of the post
+     * getter, returns a post's ID
+     * @return postId - int: the ID of the post
      */
     public int getId(){
         return postId;
     }
 
     /**
-     * getter, returns the type of the post (Original, Comment, Endorsement or Deleted)
+     * getter, returns a post's type (Original, Comment, Endorsement or Deleted)
      * @return postType - String: the type of the post
      */
     public String getPostType(){
@@ -60,16 +96,16 @@ public class Post implements Serializable{
     }
 
     /**
-     * getter, returns the number of Endorsements a post has recived 
-     * @return numberOfEndorsements - int: the number of endorsements recived by a post
+     * getter, returns the number of endorsements a post has received 
+     * @return numberOfEndorsements - int: the number of endorsements received by a post
      */
     public int getNumberOfEndorsements(){
         return numberOfEndorsements;
     }
 
     /**
-     * getter, returns the number of comments a post has recived
-     * @return numberOfComments - int: the number of comments a post has recived
+     * getter, returns the number of comments a post has received
+     * @return numberOfComments - int: the number of comments received by a post
      */
     public int getNumberOfComments(){
         return numberOfComments;
@@ -85,54 +121,18 @@ public class Post implements Serializable{
     }
 
     /**
-     * setter, sets the post type to the posts updated type - used when a comment is deleted but stored in deletedComments
-     * @param postType - String: the updated postype of the Post
+     * setter, sets the post type to a new type, used when a comment is deleted and stored in deletedComments
+     * @param postType - String: the type the post should be updated to
      */
     public void setPostType(String postType){
         this.postType = postType;
     }
 
     /**
-     * void, when a post is endorsed, this is called to increment number of endorsements.
+     * setter, when the platform is loaded from a file, NO_OF_POSTS is saved so IDS are incremented correctly
+     * @param no - Integer: the number of posts that the platform had when saved
      */
-    public void addEndorsement(){
-        numberOfEndorsements += 1;
-    }
-
-    /**
-     * void, used when an endorsement is deleted, decrements the number of endorsements.
-     */
-    public void removeEndorsement(){
-        numberOfEndorsements -= 1;
-    }
-
-    /**
-     * void, used when a post recives a comment, increments the number of comments.
-     */
-    public void addComment(){
-        numberOfComments += 1;
-    }
-
-    /**
-     * void, used when a post's comment is deleted, decrements the number of comments.
-     */
-    public void removeComment(){
-        numberOfComments -= 1;
-    }
-
-    /**
-     * void, called when the platofrm is erased. This resets the NO_OF_POSTS to 0 so ids start from 1.
-     */
-    public static void reset(){
-        NO_OF_POSTS = 0;
-    }
-
-    /**
-     * setter, when the platform is loaded from a file, the NO_OF_POSTS is saved so IDS are incremented correctly. 
-     * This function sets the NO_OF_POSTS to that updated attribute.
-     * @param i - Integer: the number of posts that the platform had when saved, stores it when loaded.
-     */
-    public static void setNO_OF_POSTS(Integer i){
-        NO_OF_POSTS = i;
+    public static void setNO_OF_POSTS(Integer no){
+        NO_OF_POSTS = no;
     }
 }
