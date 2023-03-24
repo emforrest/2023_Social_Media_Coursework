@@ -23,10 +23,10 @@ public class SocialMedia implements SocialMediaPlatform {
 
 
 	/**
-	 * returns an account given it's handle. Throws HandleNotRecognisedException if the handle isn't saved in accounts.
-	 * @param handle - String: The handle of the account that is being searched for.
-	 * @return a - Account: The account with said handle.
-	 * @throws HandleNotRecognisedException - Thrown if the handle is not found.
+	 * returns an account given it's handle. Throws HandleNotRecognisedException if the handle isn't saved in accounts
+	 * @param handle - String: The handle of the account that is being searched for
+	 * @return a - Account: The account with said handle
+	 * @throws HandleNotRecognisedException - Thrown if the handle is not found
 	 */
 	private Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//given an account handle, return the account object
@@ -502,7 +502,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				removeAccount(a.getHandle());
 			}
 		} catch (HandleNotRecognisedException e){
-			//as we are only using handles stored in accounts, this wont be happen. This assertion is to validate that.
+			//as we are only using handles stored in accounts, this wont be happen. This assertion is to validate that
 			assert(accounts.isEmpty()) : "while loop has been left with accounts still in it";
 		}
 		//use the reset methods to set NO_OF_ACCOUNTS and NO_OF_POSTS to 0.
@@ -518,10 +518,10 @@ public class SocialMedia implements SocialMediaPlatform {
 	public void savePlatform(String filename) throws IOException {
 		//create a new file with filename, setting an ObjectOutputStream to this file. This will throw an IOException if there is a problem.
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
-		//add the accounts and deleted comments arraylists to this file. The posts will be saved with the accounts.
+		//add the accounts and deleted comments arraylists to this file. The posts will be saved with the accounts
 		out.writeObject(accounts);
 		out.writeObject(deletedComments);
-		//upcast the int values NO_OF_POSTS() and NO_OF_ACCOUNTS(), to an Integer array, to so the id's are made correctly once loaded.
+		//upcast the int values NO_OF_POSTS() and NO_OF_ACCOUNTS(), to an Integer array, to so the id's are made correctly once loaded
 		Integer[] Numbers = {Post.getNO_OF_POSTS(), Account.getNO_OF_ACCOUNTS()};
 		out.writeObject(Numbers);
 		//close the output stream.
