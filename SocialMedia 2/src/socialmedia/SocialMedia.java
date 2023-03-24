@@ -22,6 +22,12 @@ public class SocialMedia implements SocialMediaPlatform {
 	private ArrayList<Comment> deletedComments = new ArrayList<>(); //contains any Comment objects that have been deleted, so that any successive comments can still refer to them, thus preventing them from being removed by the garbage collector
 
 
+	/**
+	 * returns an account given it's handle. Throws HandleNotRecognisedException if the handle isn't saved in accounts.
+	 * @param handle - String: The handle of the account that is being searched for.
+	 * @return a - Account: The account with said handle.
+	 * @throws HandleNotRecognisedException - Thrown if the handle is not found.
+	 */
 	private Account returnAccount(String handle) throws HandleNotRecognisedException {
 		//given an account handle, return the account object
 		for(Account a : accounts) {
@@ -276,6 +282,7 @@ public class SocialMedia implements SocialMediaPlatform {
 				postDetails += "Account: "+a.getHandle()+" \n";
 				postDetails += "No. endorsements: " + Integer.toString(post.getNumberOfEndorsements()) +" | No. comments: " + Integer.toString(post.getNumberOfComments()) + " \n";
 				postDetails += post.getMesssage() +"\n";
+				//the string is now formatted appropriatley, and returned. 
 				return postDetails;
 			}
 		}
@@ -285,13 +292,17 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	public StringBuilder showPostChildrenDetails(int id)
 			throws PostIDNotRecognisedException, NotActionablePostException {
+		// loop through all accounts
 		for (Account a: accounts){
+			//if the account has a post with the matching id, check if the post is Actionable. If not, throw NotActionablePostException.
 			if (a.hasPost(id)){
 				if (a.getPost(id).getPostType().equals("EndorsementPost") || a.getPost(id).getPostType().equals("DeletedPost")){
 					throw new NotActionablePostException();
 				}
+				//create a stringbuilder, and append show individiual postid on the parent post.
 				StringBuilder postChildrenDetails = new StringBuilder();
 				postChildrenDetails.append(showIndividualPost(id));
+				//enter recursivePost to build the stringBuilder, at depth 0.
 				recursivePost(a.getPost(id), 0, postChildrenDetails);
 				return postChildrenDetails;
 			}
@@ -299,6 +310,15 @@ public class SocialMedia implements SocialMediaPlatform {
 		throw new PostIDNotRecognisedException();
 	}
 
+	/**
+	 * Recursive post. Recursive solution to building the children details. Displays the thread properly formatted with the |'s and indents
+	 * each child calls this method with all of their own children posts, until a post has no comments, where the base case is met.
+	 * @param post - Post: The parent post that the method is being called on. It will be added to the postChildrenDetails stringbuilder 
+	 * and then it's children will call this method
+	 * @param depth - int: how many parent's a post has. used to make the indenting. 
+	 * @param postChildrenDetails - StringBuilder: The current thread, will be added to in this method. 
+	 * @throws PostIDNotRecognisedException
+	 */
 	private void recursivePost(Post post, int depth, StringBuilder postChildrenDetails) throws PostIDNotRecognisedException{
 		ArrayList<Comment> childrenPosts = new ArrayList<>();
 		// if depth = 0, the post is the original post, and so does not need to be altered
@@ -309,8 +329,9 @@ public class SocialMedia implements SocialMediaPlatform {
 			}
 			//put in the | > that links a post to it's reply
 			postChildrenDetails.append("| >");
-			// go through each line, and indent it before adding to the string builder 
+			//here is where we use deletedposts, if the child post is not a DeletedPost, display it as usual.
 			if (post.getPostType() != "DeletedPost") {
+				// go through each line, and indent it before adding to the string builder 
 				Scanner scanner = new Scanner(showIndividualPost(post.getId()));
 				postChildrenDetails.append("\t");
 				postChildrenDetails.append(scanner.nextLine() + "\n");
@@ -318,12 +339,13 @@ public class SocialMedia implements SocialMediaPlatform {
 					for(int i =0; i<depth; i++){
 						postChildrenDetails.append("\t");
 					}
-				//after indenting each line, add it to the stringbuilder
+				//after indenting each line based on depth, add it to the stringbuilder
 					postChildrenDetails.append(scanner.nextLine() + "\n");
 				}
 			//close the scanner
 			scanner.close();
 			}
+			//if the post is deleted post, just display the default message that it is given when it is 'deleted'
 			else {
 				postChildrenDetails.append("\t");
 				postChildrenDetails.append(post.getMesssage() + "\n");
@@ -331,7 +353,7 @@ public class SocialMedia implements SocialMediaPlatform {
 		}
 		//base case, if number of comments is 0, exit recusion
 		if (post.getNumberOfComments()==0){
-			//check if there is a deleted comment; this may have comments under it which should still be displayed
+			//check if there is a deleted comment; this may have comments under it which should stil be displayed
 			boolean hasDeletedComment = false;
 			for (Comment c: deletedComments){
 				if (c.getOriginalPostID() == post.getId()){
@@ -353,12 +375,13 @@ public class SocialMedia implements SocialMediaPlatform {
 			ArrayList<Comment> Comments = a2.getComments();
 			for(Comment c : Comments) {
 				if (c.getOriginalPostID() == post.getId()) {
-					// if a account has a comment linked aboce, call recursivePost on it, increasing the depth by 1
+					// if a account has a comment linked above, add it to the arraylist childrenPosts
 					childrenPosts.add(c);
 					////recursivePost(c, depth + 1, postChildrenDetails);
 				}
 			}
 		}
+		//serach through the deleted comments too, if their parent is the post stored in post, add this to the chldrenposts.
 		for (Comment deletedComment : deletedComments){
 			if (deletedComment.getOriginalPostID() == post.getId()){
 				childrenPosts.add(deletedComment);
@@ -366,8 +389,9 @@ public class SocialMedia implements SocialMediaPlatform {
 
 		}
 		
-		///ArrayList<Comment> childrenPostsSorted = Collections.sort(childrenPosts, new compareByPostId());
+		//sort the array list by id in ascending order.
 		childrenPosts.sort((o1, o2) -> (o1.getId()-o2.getId()));
+		//recursive step, call the function with all of it's children, increasing depth by 1 so they're properly indented.
 		for (Comment child : childrenPosts){
 			recursivePost(child, depth + 1, postChildrenDetails);
 		}
@@ -376,27 +400,37 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int getNumberOfAccounts() {
+		//return the size of the accounts arraylist. This is the number of active accounts.
 		return accounts.size();
 	}
 
 	@Override
 	public int getTotalOriginalPosts() {
+		/*NO_OF_POSTS is a recorded attribute, but it can't be used as it doesn't keep track of deleted posts, and counts endorsements 
+		and comments so ids can be incremented. */
 		int totalOriginalPosts = 0;
+		//loop though all accounts and all their post
 		for (Account a: accounts){
 			for (Post p: a.getPosts()){
+				//if their post type is OriginalPost, add it to the totalOriginalPosts
 				if (p.getPostType().equals("OriginalPost")){
 					totalOriginalPosts +=1;
 				}
 			}
 		}
+		//return totalOriginalPosts once all accounts and posts have been checked.
 		return totalOriginalPosts;
 	}
 
 	@Override
+	/*
+	 * works much the same as finding number of originalPosts. they arent kept track of, and so they are looped though and counted.
+	 */
 	public int getTotalEndorsmentPosts() {
 		int totalEndorsementPosts = 0;
 		for (Account a: accounts){
 			for (Post p: a.getPosts()){
+				//this time, check if post type is EndorsementPost.
 				if (p.getPostType().equals("EndorsementPost")){
 					totalEndorsementPosts +=1;
 				}
@@ -406,6 +440,9 @@ public class SocialMedia implements SocialMediaPlatform {
 	}
 
 	@Override
+	/*
+	 * once again, much the same. count the number of posts who's postType is comment.
+	 */
 	public int getTotalCommentPosts() {
 		int totalCommentPosts = 0;
 		for (Account a: accounts){
@@ -417,50 +454,61 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int getMostEndorsedPost() {
+		//set mostPopularPostId to -1, which will be returned if their are no posts. otherwise maxNumberOfEndorsements will start at 0.
 		int mostPopularPostID = -1;
 		int maxNumberOfEndorsements = -1;
+		//loop though all accounts, and get their posts.
 		for( Account a : accounts){
 			ArrayList<Post> posts = a.getPosts();
 			for (Post p : posts){
+				//if the post has more endosements than what is currently reccorded as maxNumberOfEndorsements: 
 				if (p.getNumberOfEndorsements() > maxNumberOfEndorsements){
+					//set maxNumberOfEndorsements as this post
 					maxNumberOfEndorsements = p.getNumberOfEndorsements();
+					//set mostPopularPostID to this posts id.
 					mostPopularPostID = p.getId();
 				}
 			}
 		}
+		/*return the post id which has the highest number of endorsements recorded. If 2 posts have the same no of endorsmenets
+		the first one will be returned*/
 		return mostPopularPostID;
 	}
 
 	@Override
 	public int getMostEndorsedAccount() {
+		//works much the same as most endorsed post:
 		int maxNumberOfEndorsements = -1;
 		int mostPopularAccountId = -1;
 		for (Account a: accounts){
-			int sumOfEndorsements = 0;
-			ArrayList<Post> posts = a.getPosts();
-			for (Post p : posts){
-				sumOfEndorsements += p.getNumberOfEndorsements();
-			}
+			//get the number of endorsements using the getNoOfEndorsements method.
+			int sumOfEndorsements = a.getNoOfEndorsements();
+			//if this number is bigger than the current maxNumberOfEndorsements, save this number, and save the account ID.
 			if (sumOfEndorsements > maxNumberOfEndorsements){
 				maxNumberOfEndorsements = sumOfEndorsements;
 				mostPopularAccountId = a.getId();
 			}
 		}
+		//once all accounts have been checked, return the id of the account with the most endorsements.
 		return mostPopularAccountId;
 	}
 
 	@Override
 	public void erasePlatform() {
+		// try to handle the HandleNotRecognisedException, as removeAccount is being used and it throws that.
 		try{
 			while (!accounts.isEmpty()) {
 				Account a = accounts.get(0);
 				removeAccount(a.getHandle());
 			}
 		} catch (HandleNotRecognisedException e){
-			System.out.println("problem");
+			//as we are only using handles stored in accounts, this wont be happen. This assertion is to validate that.
+			assert(accounts.isEmpty()) : "while loop has been left with accounts still in it";
 		}
+		//use the reset methods to set NO_OF_ACCOUNTS and NO_OF_POSTS to 0.
 		Account.reset();
 		Post.reset();
+		//go through the deletedComments arraylist and remove their reference, so they are removed from the heap by the garbage collector.
 		while (!deletedComments.isEmpty()){
 			deletedComments.remove(0);
 		}
@@ -468,43 +516,59 @@ public class SocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public void savePlatform(String filename) throws IOException {
+		//create a new file with filename, setting an ObjectOutputStream to this file. This will throw an IOException if there is a problem.
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
+		//add the accounts and deleted comments arraylists to this file. The posts will be saved with the accounts.
 		out.writeObject(accounts);
 		out.writeObject(deletedComments);
+		//upcast the int values NO_OF_POSTS() and NO_OF_ACCOUNTS(), to an Integer array, to so the id's are made correctly once loaded.
 		Integer[] Numbers = {Post.getNO_OF_POSTS(), Account.getNO_OF_ACCOUNTS()};
 		out.writeObject(Numbers);
+		//close the output stream.
 		out.close();
 	}
 
 	@Override
 	public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
+		//erase the current platform.
 		erasePlatform();
+		//set a new input stream from the file in filename.
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename)); 
+		//this will be looped until return is hit, when there are no more objects and the exception is raised.
 		while (true) {
 			try {
+				// using the general obj type to account for the 3 types of objects stored in the file.
 				Object obj = in.readObject();
+				//if the object is an ArrayList, upcast it safley. 
 				if (obj instanceof ArrayList) {
 					ArrayList lst = (ArrayList) obj;
+					//if the list is empty, move to the next object.
 					if (lst.isEmpty()) {
 						continue;
 					}
+					//if the first value in this arraylist is an account, this is the accounts Arraylist. upcast the whole arraylist and save to accounts.
 					if (lst.get(0) instanceof Account) {
 						accounts = (ArrayList<Account>) lst;
 					}
+					//if the first value is a comment, it is the deleted comments. upcast and save.
 					if (lst.get(0) instanceof Comment) {
 						deletedComments = (ArrayList<Comment>) lst;
 					}
 				}
+				//otherwise, it is out NO_OF_POSTS and NO_OF_ACOUNTS.
 				if (obj instanceof Integer[]) {
+					//upacst out object to a list of Integer.
 					Integer[] intlst = (Integer[]) obj;
+					//the 0th index is posts and 1st is accounts, save these to our platform.
 					Post.setNO_OF_POSTS(intlst[0]);
 					Account.setNO_OF_ACOUNTS(intlst[1]);
 					}
+			//there are no more objects. Break the while loop
 			} catch (Exception e) {
 				break;
 			}
-
 		}
+		//close the input stream.
 		in.close();
 	}
 
