@@ -3,16 +3,22 @@ package socialmedia;
 import java.io.IOException;
 
 /**
- * BadMiniSocialMedia is a minimally compiling, but non-functioning implementor
- * of the MiniSocialMediaPlatform interface.
+ * BadSocialMedia is a minimally compiling, but non-functioning implementor of
+ * the SocialMediaPlatform interface.
  * 
  * @author Diogo Pacheco
  * @version 1.0
  */
-public class MiniSocialMedia implements MiniSocialMediaPlatform {
+public class BadSocialMedia implements SocialMediaPlatform {
 
 	@Override
 	public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -24,8 +30,20 @@ public class MiniSocialMedia implements MiniSocialMediaPlatform {
 	}
 
 	@Override
+	public void removeAccount(String handle) throws HandleNotRecognisedException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void changeAccountHandle(String oldHandle, String newHandle)
 			throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
 		// TODO Auto-generated method stub
 
 	}
@@ -73,6 +91,30 @@ public class MiniSocialMedia implements MiniSocialMediaPlatform {
 			throws PostIDNotRecognisedException, NotActionablePostException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getNumberOfAccounts() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTotalOriginalPosts() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTotalEndorsmentPosts() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTotalCommentPosts() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
