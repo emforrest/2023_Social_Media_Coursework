@@ -5,7 +5,7 @@ In Term 2 of my first year at university, I was assigned coursework for the Obje
 
 The task was to create a functioning backend for a hypothetical social media platform in Java. This included creating accounts and posts, and allowing users to make comments on other user's posts or endorse a post (similar to a retweet on Twitter). 
 
-***It implemented an interface provided to us by the module leader. Our code is that in the files SocialMedia.java, Account.java, Post.java, Comment.java, Endorsement.java and SocialMediaPlatformTestApp.java; the other files were provided.
+***It implemented an interface provided to us by the module leader. Our code is that in the files SocialMedia.java, Account.java, Post.java, Comment.java, Endorsement.java and SocialMediaPlatformTestApp.java; the other files were provided.***
 
 Included in this repository are: the .java and .class source files; an iteration of our testing file (which was not required in the submission); a javadoc documenting our app using the documentation comments we provided; a pdf printout of the source code we created; and the cover page, which anonymously documented who was the driver and observer each time we met up to code(I was 234689 for reference).
 
