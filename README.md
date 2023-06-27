@@ -7,6 +7,6 @@ The task was to create a functioning backend for a hypothetical social media pla
 
 ***It implemented an interface provided to us by the module leader. Our code is that in the files SocialMedia.java, Account.java, Post.java, Comment.java, Endorsement.java and SocialMediaPlatformTestApp.java; the other files were provided.***
 
-Included in this repository are: the .java and .class source files; an iteration of our testing file (which was not required in the submission); a javadoc documenting our app using the documentation comments we provided; a pdf printout of the source code we created; and the cover page, which anonymously documented who was the driver and observer each time we met up to code(I was 234689 for reference).
+Included in this repository are: the .java and .class source files; an iteration of our testing file (which was not required in the submission); a javadoc documenting our app using the documentation comments we provided; a pdf printout of the source code we created; and the cover page, which anonymously documented who was the driver and observer each time we met up to code (I was 234689 for reference).
 
 We agreed to weight the coursework 50:50, so both of us achieved the same grade, which was 81/100.
